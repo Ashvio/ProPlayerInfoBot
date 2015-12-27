@@ -1,17 +1,15 @@
 from lxml import etree
-
-from xml.etree import ElementTree as ET
-
-# Open the table and put it in a string
 from src.Player import Player
-
+import pickle
 
 # Returns a list of dictionary mapping player names to players, found in the file
 
 
 def build_database(filename, region):
-    html_file = open(filename, "r", encoding="UTF-8")
-    table_string = html_file.read()
+
+    with open(filename, "r", encoding="UTF-8") as html_file:
+        table_string = html_file.read()
+
     parser = etree.XMLParser(recover=True)
 
     # Turn the string into an actual table
@@ -51,4 +49,16 @@ def build_database(filename, region):
     return player_dict
 
 
+def save_to_file(player, filename):
+    with open(filename, 'wb') as save_file:
+        pickle.dump(player, save_file, pickle.HIGHEST_PROTOCOL)
+
+
+def load_from_file(filename):
+    with open(filename, 'rb') as load_file:
+        return pickle.load(load_file)
+
+
 player_list = build_database("../NALCS.html", "NA")
+for player in player_list.values():
+    print(player.info_table())
