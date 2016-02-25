@@ -8,6 +8,8 @@ import sys
 
 def build_database(filename, region):
 
+    global player_name_list
+
     with open(filename, "r", encoding="UTF-8") as html_file:
         table_string = html_file.read()
 
@@ -19,13 +21,14 @@ def build_database(filename, region):
 
     rows = iter(table)
 
-    player_dict = {}
+    global player_dict
     for row in rows:
         element = row[0].find("a")
         if element is not None:
             name = element.get("href")
             print(name[1:])
             player = Player(name[1:])
+            player_name_list.append(name[1:])
             element = row[2].find("a")
             if element is not None:
                 team_name = element.get("href")
@@ -61,7 +64,10 @@ def load_from_file(filename):
 
 
 player_list = build_database(sys.argv[1], "NA")
+
+
 for player in player_list.values():
     player.add_video(Video("video", "http://example.com", [player], 1))
     player.add_video(Video("video2", "http://example.com", [player_list.get("Doublelift"), player], 2))
     print(player.to_comment())
+    print(player_name_list.pop())
