@@ -1,6 +1,7 @@
 from lxml import etree
-from src.Player import Player
+from src.Player import Player, Video
 import pickle
+import sys
 
 # Returns a list of dictionary mapping player names to players, found in the file
 
@@ -59,6 +60,8 @@ def load_from_file(filename):
         return pickle.load(load_file)
 
 
-player_list = build_database("../NALCS.html", "NA")
+player_list = build_database(sys.argv[1], "NA")
 for player in player_list.values():
-    print(player.info_table())
+    player.add_video(Video("video", "http://example.com", [player], 1))
+    player.add_video(Video("video2", "http://example.com", [player_list.get("Doublelift"), player], 2))
+    print(player.to_comment())
