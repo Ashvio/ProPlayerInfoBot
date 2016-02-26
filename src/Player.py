@@ -29,7 +29,7 @@ class Player:
         heading = "|Video|Score|Other Players|\n|:--:|:--:|:--|\n"
         rows = ""
         for index, video in enumerate(self.video_list):
-            if (index >= 5):
+            if (index >= 3):
                 break
             rows += video.to_table_row(self) + "\n"
         if rows is not "":
@@ -66,7 +66,7 @@ def to_comment(players):
     for player in players:
         video_table = player.video_table()
         if video_table is not "":
-            data += "#####Top 5 Links with " + player.name + ":\n\n"
+            data += "#####Top 3 Links with " + player.name + ":\n\n"
             data += video_table
         else:
             data += "No videos found for " + player.name + "\n\n"
